@@ -1,0 +1,71 @@
+﻿@using MobileShop.Models.Home;
+@{
+    ViewBag.Title = "CheckoutDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Session["cart"] == null)
+{
+    <div class="alert alert-danger">
+        <strong>No product added to cart!</strong>
+    </div>
+
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Proizvod</th>
+                <th>Cena</th>
+                <th>Količina</th>
+                <th>Ukupno</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Total = 0;
+            }
+            @foreach (Item item in (List<Item>)Session["cart"])
+            {
+                int lineTotal = Convert.ToInt32(item.Quantity * item.Product.Price);
+                Total = Convert.ToInt32(@Total + lineTotal);
+                <tr>
+                    <td>@item.Product.ProductName</td>
+                    <td>@item.Product.Price</td>
+                    <td>@item.Quantity</td>
+                    <td>@lineTotal</td>
+                </tr>
+            }
+
+            <tr>
+                <td colspan="4" class="text-right"><b>Ukupno: @Total</b>€</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 style="text-align:center;">Unesite Vaše podatke</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Ime i Prezime</th>
+                <th>Adresa</th>
+                <th>E-mail</th>
+                <th>Br.Telefona</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th><input type="text" aria-label="First name" class="form-control"></th>
+                <th><input type="text" aria-label="Address" class="form-control"></th>
+                <th><input type="text" aria-label="E-mail" class="form-control"></th>
+                <th><input type="text" aria-label="Phone Number" class="form-control"></th>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <a class="btn btn-success" href="@Url.Action("FinishOrder","Home")">Naruči >></a>
+}
+
